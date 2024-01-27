@@ -2,8 +2,8 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-xs-6">
-                <h1 class="panel-title text-left"></h1>
-                <img src="" alt="" class="contact-img">
+                <h1 class="panel-title text-left">{{ contact.name }}</h1>
+                <img [src]="contact.imgUrl" alt="{{ contact.name }}" class="contact-img">
             </div>
             
             <div class="col text-right">
@@ -14,7 +14,7 @@
     </div>
 
     <div class="panel-body">
-                <h3>Email: </h3>
-                <h3>Phone: </h3>
+                <h3>Email: {{ contact.email }} </h3>
+                <h3>Phone: {{ contact.phone }}</h3>
     </div>
 </div>
