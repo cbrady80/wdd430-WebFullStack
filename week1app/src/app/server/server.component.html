@@ -1,0 +1,13 @@
+<!-- The double curly braces are string interpolation. -->
+
+<!-- ATTRIBUTE DIRECTIVES dont add or remove elements,
+     they only change the element they are placed on. -->
+     
+<!-- Adding a DIRECTIVE to dynamically style the element - use ngStyle,
+    the square brackets are binding the directive to the property-->
+<!-- Adding ngClass allows us to dynamically add or remove a class,
+    this also needs the square brackets for the property binding. -->
+<p [ngStyle]="{backgroundColor: getColor()}"
+[ngClass]="{online: serverStatus === 'online'}">
+    {{ 'Server' }} with ID {{ serverID }} is {{ getServerStatus() }}
+</p>
