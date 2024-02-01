@@ -1,0 +1,30 @@
+<label>Server Name</label>
+<!-- the $event variable is reserved for event binding -->
+<!-- <input type="text" class="form-control" (input)="onUpdateServerName($event)"> -->
+
+<!-- Next example is of 2-WAY BINDING use square brackets and parentheses -->
+<input type="text" class="form-control" [(ngModel)]="serverName">
+
+<!-- <p>{{ serverName }}</p> -->
+
+<!-- The square brackets around disabled are for PROPERTY BINDING -->
+<!-- The parentheses around CLICK are for EVENT BINDING (like doing onclick())-->
+<button class="btn btn-primary" [disabled]="!allowNewServer"
+(click)="onCreateServer()">Add Server</button>
+
+<!-- <p>{{ allowNewServer }}</p>  String interpolation -->
+<!-- <p [innerText]="allowNewServer"></p>  Property binding -->
+
+<!-- <p>{{ serverCreationStatus }}</p> -->
+
+<!-- Adding a DIRECTIVE -->
+<!-- *ngIf is a STRUCTURAL directive, so you have to have the * first,
+    Structural directives change items on the DOM (ie adding a <p> element) -->
+<p *ngIf="serverCreated; else noServer">Server was created, server name is {{ serverName }}</p>
+<!-- Adding a LOCAL REFERENCE with # -->
+<ng-template #noServer>
+    <p>No server was created.</p>
+</ng-template>
+
+
+<app-server *ngFor="let server of serversList"></app-server>
