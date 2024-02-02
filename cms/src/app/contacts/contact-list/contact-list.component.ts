@@ -7,7 +7,12 @@ import { Contact } from '../contact.model';
   styleUrl: './contact-list.component.css'
 })
 export class ContactListComponent {
-  
+  @Output() selectedContactEvent = new EventEmitter<Contact>();
+
+  onSelected(contact: Contact) {
+    this.selectedContactEvent.emit(contact);
+  }
+
   contacts: Contact[] = [
     new Contact(
       '1', 
@@ -26,10 +31,4 @@ export class ContactListComponent {
       null
     )
   ];
-
-  @Output() selectedContactEvent = new EventEmitter<Contact>();
-
-  onSelected(contact: Contact) {
-    this.selectedContactEvent.emit(contact);
-  }
 }
