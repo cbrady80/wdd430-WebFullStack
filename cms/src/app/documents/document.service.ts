@@ -7,6 +7,7 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 })
 export class DocumentService {
   documentSelectedEvent = new EventEmitter<Document>();
+  documentChangedEvent = new EventEmitter<Document[]>();
   private documents: Document[] = [];
 
   constructor() {
@@ -24,5 +25,19 @@ export class DocumentService {
       }
     }
     return null;
+  }
+
+  deleteDocument(document: Document) {
+    if (!document) {
+      return;
+    }
+
+    const position = this.documents.indexOf(document);
+    if (position < 0) {
+      return;
+    }
+
+    this.documents.splice(position, 1);
+    this.documentChangedEvent.emit(this.documents.slice());
   }
 }
