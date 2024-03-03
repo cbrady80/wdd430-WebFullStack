@@ -23,7 +23,7 @@ export class DocumentService {
     return this.documents.slice();
   }
 
-  getDocument(id: string) {
+  getDocument(id: string): Document {
     for(let document of this.documents) {
       if(document.id === id) {
         return document;
@@ -64,9 +64,10 @@ export class DocumentService {
 
     this.maxDocumentId++
     // Convert newDocument.Id to a string so that it can be set on the document obj.
-    let maxIdString = this.maxDocumentId.toString();
-    newDocument.id = maxIdString;
-
+    // let maxIdString = this.maxDocumentId.toString();
+    // newDocument.id = maxIdString;
+    
+    newDocument.id = String(this.maxDocumentId);
     this.documents.push(newDocument);
     this.documentListChangedEvent.next(this.documents.slice());
   }
