@@ -23,7 +23,7 @@ export class ContactService {
     return this.contacts.slice();
   }
 
-  getContact(id: string) {
+  getContact(id: string): Contact {
     for(let contact of this.contacts) {
       if(contact.id === id) {
         return contact;
@@ -64,14 +64,15 @@ export class ContactService {
 
     this.maxContactId++
     // Convert newContact.Id to a string so that it can be set on the document obj.
-    let maxIdString = this.maxContactId.toString();
-    newContact.id = maxIdString;
+    // let maxIdString = this.maxContactId.toString();
+    // newContact.id = maxIdString;
 
+    newContact.id = String(this.maxContactId);
     this.contacts.push(newContact);
     this.contactListChangedEvent.next(this.contacts.slice());
   }
 
-  updateDocument(originalContact: Contact, newContact: Contact) {
+  updateContact(originalContact: Contact, newContact: Contact) {
     if(originalContact === undefined || originalContact === null) {
       return;
     }
