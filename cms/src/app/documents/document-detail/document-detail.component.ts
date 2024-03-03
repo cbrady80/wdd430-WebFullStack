@@ -28,8 +28,6 @@ export class DocumentDetailComponent implements OnInit {
         this.document = this.documentService.getDocument(this.id);
       }
     );
-
-    // this.nativeWindow = windowRefService.getNativeWindow();
   }
 
   onView() {
