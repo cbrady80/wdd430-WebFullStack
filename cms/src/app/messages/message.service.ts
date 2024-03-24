@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Message } from './message.model';
 import { MOCKMESSAGES } from './MOCKMESSAGES';
+import { ContactService } from '../contacts/contact.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class MessageService {
   messageChangedEvent = new EventEmitter<Message[]>();
   maxMessageId: number = 0;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private http: HttpClient, private contactService: ContactService) {
     // this.messages = MOCKMESSAGES;
     this.maxMessageId = this.getMaxId();
   }
@@ -22,12 +23,12 @@ export class MessageService {
   }
   
   // getMessages(): Message[] {
-  //   return this.messages.slice();
+  //   return this.messages.slice();,
   // }
 
   getMessages(): any {
-    this.httpClient
-      .get<Message[]>('https://cms-project-4e26b-default-rtdb.firebaseio.com/messages.json')
+    this.http
+      .get('http://localhost:3000/documents')
       .subscribe(
         (messages: Message[]) => {
           this.messages = messages;
@@ -90,9 +91,9 @@ export class MessageService {
     const messageString = JSON.stringify(this.messages);
     // const headers = new HttpHeaders({'Content-Type': 'application/json'});
   
-    this.httpClient
+    this.http
       .put(
-        'https://cms-project-4e26b-default-rtdb.firebaseio.com/messages.json', 
+        'http://localhost:3000/documents', 
         messageString,
         {headers: new HttpHeaders({'Content-Type': 'application/json'})}
       )

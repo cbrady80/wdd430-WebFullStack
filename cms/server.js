@@ -6,6 +6,12 @@ var http = require('http');
 // var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
+
+// Import the dotenv file
+const dotenv = require('dotenv');
+// Initiate dotenv to make environment variables available throughout the application
+dotenv.config();
 
 // import the routing file to handle the default (index) route
 var index = require('./server/routes/app');
@@ -61,6 +67,15 @@ app.use('/documents', documentRoutes);
 // Tell express to map all other non-defined routes back to the index page
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './dist/cms/browser/index.html'));
+});
+
+// establish a connection to the mongo database
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => {
+    console.log('Connected to database!');
+})
+.catch(() => {
+    console.log('Connection failed.');
 });
 
 // Define the port address and tell express to use this port
