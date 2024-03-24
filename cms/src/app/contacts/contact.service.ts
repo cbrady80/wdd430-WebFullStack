@@ -31,7 +31,7 @@ export class ContactService {
 
   getContacts(): any {
     this.httpClient
-      .get<Contact[]>('https://cms-project-4e26b-default-rtdb.firebaseio.com/contacts.json')
+      .get<Contact[]>('http://localhost:3000/documents')
       .subscribe(
         (contacts: Contact[]) => {
           this.contacts = contacts;
@@ -133,7 +133,7 @@ export class ContactService {
   
     this.httpClient
       .put(
-        'https://cms-project-4e26b-default-rtdb.firebaseio.com/contacts.json', 
+        'http://localhost:3000/documents', 
         contactString,
         {headers: new HttpHeaders({'Content-Type': 'application/json'})}
       )

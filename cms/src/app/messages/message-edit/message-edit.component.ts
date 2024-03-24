@@ -12,7 +12,7 @@ export class MessageEditComponent implements OnInit {
   @ViewChild('msgText') msgTextInputRef: ElementRef;
   // @Output() addMessageEvent = new EventEmitter<Message>();
 
-  currentSender: string = '0';
+  
 
   constructor(private messageService: MessageService) { }
 
@@ -21,7 +21,9 @@ export class MessageEditComponent implements OnInit {
   onSendMessage() {
     const newSubject = this.subjectInputRef.nativeElement.value;
     const newMsgText = this.msgTextInputRef.nativeElement.value;
-    const newMessage = new Message(null, newSubject, newMsgText, this.currentSender);
+    const currentSender: string = '20';
+    // const newMessage = new Message(null, newSubject, newMsgText, this.currentSender);
+    const newMessage = new Message('1', newSubject, newMsgText, currentSender);
     this.messageService.addMessage(newMessage);
   }
 
