@@ -4,7 +4,7 @@ var router = express.Router();
 const sequenceGenerator = require('./sequenceGenerator');
 const Contact = require('../models/contact');
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
     console.log('GET contacts');
     Contact.find()
         .populate('group')
