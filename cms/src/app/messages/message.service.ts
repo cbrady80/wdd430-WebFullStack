@@ -28,30 +28,35 @@ export class MessageService {
 
   getMessages(): any {
     this.http
-      .get('http://localhost:3000/documents')
-      .subscribe(
-        (messages: Message[]) => {
-          this.messages = messages;
-          this.maxMessageId = this.getMaxId();
-          //sort the list of messages
-          this.messages.sort((a: Message, b: Message) =>{
-            const senderA = a.sender.toUpperCase();
-            const senderB = b.sender.toUpperCase();
-            if (senderA < senderB) {
-              return -1;
+      .get('http://localhost:3000/messages')
+      .subscribe({
+        next: (messageData: {message: string, messages: Message[] }) => {
+          // this.messages = messageData.messages;
+          // this.maxMessageId = this.getMaxId();
+          {
+            // the populate() method at the server pulled down full contact
+            // information based on the foreign key of the sender.
+            // We only need the friendly id of the sender.
+            for (let msg of messageData.messages) {
+              if (msg.sender) {
+                msg.sender = msg.sender['id'];
+              }
             }
-            if (senderA > senderB) {
-              return 1;
-            }
-            return 0;
-          });
-          //emit the next document list change event
-          this.messageChangedEvent.next(this.messages.slice());
-      }
-        // (error: any) => {
-        //   console.log(error);
-        // }
-      )
+            // purge messages with missing senders  
+            this.messages = messageData.messages;
+            // for (let msg of this.messages) {
+            //   if (!msg.sender) {
+            //     this.deleteMessage(msg);
+            //   }
+
+            //emit the next document list change event
+            this.messageChangedEvent.next(this.messages.slice());
+          }
+        },
+        error: (error) => {
+          console.log('getMessages error ' + error);
+        }
+      });    
   }
 
   getMessage(id: string) {
@@ -93,7 +98,7 @@ export class MessageService {
   
     this.http
       .put(
-        'http://localhost:3000/documents', 
+        'http://localhost:3000/messages', 
         messageString,
         {headers: new HttpHeaders({'Content-Type': 'application/json'})}
       )

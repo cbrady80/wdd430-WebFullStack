@@ -30,14 +30,13 @@ export class ContactService {
   // }
 
   getContacts(): any {
-    this.httpClient
-      .get<Contact[]>('http://localhost:3000/documents')
-      .subscribe(
-        (contacts: Contact[]) => {
-          this.contacts = contacts;
+    this.httpClient.get('http://localhost:3000/contacts')
+      .subscribe({
+        next: (contactData: {message: string, contacts: Contact[]}) => {
+          this.contacts = contactData.contacts;
           this.maxContactId = this.getMaxId();
           //sort the list of docs
-          this.contacts.sort((a: Contact, b: Contact) =>{
+          this.contacts.sort((a, b) =>{
             const nameA = a.name.toUpperCase();
             const nameB = b.name.toUpperCase();
             if (nameA < nameB) {
@@ -50,6 +49,8 @@ export class ContactService {
           });
           //emit the next document list change event
           this.contactListChangedEvent.next(this.contacts.slice());
+      }
+        
       }
         // (error: any) => {
         //   console.log(error);
@@ -133,7 +134,7 @@ export class ContactService {
   
     this.httpClient
       .put(
-        'http://localhost:3000/documents', 
+        'http://localhost:3000/contacts', 
         contactString,
         {headers: new HttpHeaders({'Content-Type': 'application/json'})}
       )

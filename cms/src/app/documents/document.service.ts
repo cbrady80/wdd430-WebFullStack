@@ -13,7 +13,7 @@ export class DocumentService {
   // documentChangedEvent = new EventEmitter<Document[]>();
   documentListChangedEvent = new Subject<Document[]>();
 
-  documents: Document[] = [];
+  private documents: Document[] = [];
   private maxDocumentId: number;
 
   constructor(private http: HttpClient) {
@@ -29,32 +29,64 @@ export class DocumentService {
   //   return this.documents.slice();
   // }
 
+  // getDocuments(): any {
+  //   this.http
+  //     .get<Document[]>('http://localhost:3000/documents')
+  //     .subscribe(
+  //       (documents: Document[]) => {
+  //         this.documents = documents;
+  //         this.maxDocumentId = this.getMaxId();
+  //         //sort the list of docs
+  //         this.documents.sort((a: Document, b: Document) =>{
+  //           const nameA = a.name.toUpperCase();
+  //           const nameB = b.name.toUpperCase();
+  //           if (nameA < nameB) {
+  //             return -1;
+  //           }
+  //           if (nameA > nameB) {
+  //             return 1;
+  //           }
+  //           return 0;
+  //         });
+  //         //emit the next document list change event
+  //         this.documentListChangedEvent.next(this.documents.slice());
+  //     }
+  //       // (error: any) => {
+  //       //   console.log(error);
+  //       // }
+  //     )
+  // }
+
   getDocuments(): any {
-    this.http
-      .get<Document[]>('http://localhost:3000/documents')
-      .subscribe(
-        (documents: Document[]) => {
-          this.documents = documents;
+    this.http.get('http://localhost:3000/documents')
+    .subscribe({
+      next: (documentData: {message: string, documents: Document[]}) => { 
+          console.log(documentData.message);
+          this.documents = documentData.documents;
           this.maxDocumentId = this.getMaxId();
-          //sort the list of docs
-          this.documents.sort((a: Document, b: Document) =>{
-            const nameA = a.name.toUpperCase();
-            const nameB = b.name.toUpperCase();
+          // sort the documents.
+          this.documents.sort((a, b) => {
+            //compare function
+            const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+            const nameB = b.name.toUpperCase(); // ignore upper and lowercase
             if (nameA < nameB) {
               return -1;
             }
             if (nameA > nameB) {
               return 1;
-            }
+            }      
+            // names must be equal
             return 0;
           });
-          //emit the next document list change event
-          this.documentListChangedEvent.next(this.documents.slice());
+         
+          let documentListClone: Document[] = this.documents.slice();
+          this.documentListChangedEvent.next(documentListClone);
+          
+      },
+      error: (error) => {
+        console.log('getDocuments error '+ error);
       }
-        // (error: any) => {
-        //   console.log(error);
-        // }
-      )
+    });
   }
 
   getDocument(id: string): Document {
@@ -129,7 +161,7 @@ export class DocumentService {
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
     // add to database
-    this.http.post<{ message: string, document: Document }>('http://localhost:3000/documents',
+    this.http.post<{ message: string, document: Document }>('http://localhost:3000/documents/',
       document,
       { headers: headers })
       .subscribe(
@@ -179,7 +211,7 @@ export class DocumentService {
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
     // update database
-    this.http.put('http://localhost:3000/documents/' + originalDocument.id,
+    this.http.put('http://localhost:3000/documents' + originalDocument.id,
       newDocument, { headers: headers })
       .subscribe(
         (response: Response) => {
@@ -196,7 +228,7 @@ export class DocumentService {
   
     this.http
       .put(
-        'https://cms-project-4e26b-default-rtdb.firebaseio.com/documents.json', 
+        'http://localhost:3000/documents', 
         docString,
         {headers: new HttpHeaders({'Content-Type': 'application/json'})}
       )
