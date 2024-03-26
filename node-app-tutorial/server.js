@@ -4,6 +4,10 @@ const app = require('./backend/app');
 const debug = require('debug')('node-angular');
 const { error } = require('console');
 
+// Import the dotenv file
+const dotenv = require('dotenv');
+// Initiate dotenv to make environment variables available throughout the application
+dotenv.config();
 
 
 // This is a function to check if an env variable for the port # is a valid #.
